@@ -27,6 +27,7 @@ class DB:
         Base.metadata.create_all(self.__engine)
         SessionFactory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(SessionFactory)
+        Base.query = self.__session.query_property()
 
     def add(self, obj) -> None:
         """Adds obj to the current db session"""
@@ -62,4 +63,4 @@ class DB:
 
     def close(self) -> None:
         """Removes the current db session"""
-        self.__session.close()
+        self.__session.remove()
