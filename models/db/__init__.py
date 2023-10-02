@@ -30,7 +30,7 @@ class DB:
 
     def add(self, obj) -> None:
         """Adds obj to the current db session"""
-        self.__sesssion.add(obj)
+        self.__session.add(obj)
 
     def save(self) -> None:
         """Commits session state to database"""
@@ -42,12 +42,11 @@ class DB:
             self.__session.delete(obj)
             self.save()
 
-    def getByID(self, cls, id) -> None:
+    def getByID(self, obj, id) -> None:
         """Fetches the cls instance that matches the id"""
         models = self.allModels()
 
-        if cls in models:
-            obj = models[cls]
+        if obj in models.values():
             instance = self.__session.query(obj).filter(obj.id == id).one()
 
             return instance
@@ -55,6 +54,12 @@ class DB:
     def allModels(self) -> Dict:
         """Returns a dictionary of all available models"""
         from models.user import User
+        from models.post import Post
         return {
-                "User", User
+                "User": User,
+                "Post": Post
         }
+
+    def close(self) -> None:
+        """Removes the current db session"""
+        self.__session.close()
