@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from graphene import ObjectType, String, Schema
+import os
 
 class Query(ObjectType):
     greet = String(firstName=String(default_value="Mike Rock"))
@@ -14,4 +15,6 @@ class Query(ObjectType):
 
 schema = Schema(query=Query)
 
+print(os.path.dirname(os.path.realpath(__name__)))
+print(os.path.realpath(__name__))
 print(schema.execute('{greet(firstName:"Ola")}').data['greet'])
